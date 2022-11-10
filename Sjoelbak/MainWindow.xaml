@@ -1,0 +1,31 @@
+﻿<Window x:Class="DistRS.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DistRS"
+        mc:Ignorable="d"
+        Title="Distance and Camera view" Height="864" Width="836.8">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="101*"/>
+            <RowDefinition Height="38*"/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="txtTimeStamp" Grid.Column="0" Margin="0,0,-0.6,198.4"/>
+        <Image x:Name="imgColor" Margin="145,102,365.4,264.4" Height="240" Width="320" />
+
+        <Image x:Name="imgDepth" Grid.Column="0" Margin="470,102,40.4,264.4" Width="320" Height="240" />
+        <TextBox x:Name="Xcoordinate" HorizontalAlignment="Left" Height="23" Margin="258,0,0,0" TextWrapping="Wrap" Text="320" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="Ycoordinate" HorizontalAlignment="Left" Height="23" Margin="378,0,0,0" TextWrapping="Wrap" Text="240" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="ButtonReadDist" Content="Read Distance" HorizontalAlignment="Left" Margin="503,4,0,0" VerticalAlignment="Top" Width="110" Height="19" Click="ButtonReadDist_Click"/>
+        <TextBox x:Name="tbResult" HorizontalAlignment="Left" Height="19" Margin="618,4,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="141"/>
+        <Label Content="FPS:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="73"/>
+        <Label x:Name="lblfps" Content="Label" HorizontalAlignment="Left" Margin="47,10,0,0" VerticalAlignment="Top" Width="73"/>
+        <Button x:Name="BtnCallibrate" Content="Callibrate" HorizontalAlignment="Left" Margin="10,78,0,0" VerticalAlignment="Top" Width="110" Height="19" Click="ButtonCallibrate_Click"/>
+        <Button x:Name="BtnCompare" Content="Compare" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" Width="110" Height="19" Click="ButtonCompare_Click"/>
+        <TextBox x:Name="tbDotCount" HorizontalAlignment="Left" Height="19" Margin="10,126,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110"/>
+        <Button x:Name="BtnConnect" Content="Connect" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="110" Height="19" Click="ButtonConnect_Click"/>
+        <Canvas x:Name="CanvasMap" Height="360" Margin="175,432,175.4,0" VerticalAlignment="Top" Background="#FFD1D1D1" Grid.RowSpan="2" Width="480"/>
+    </Grid>
+
+</Window>
