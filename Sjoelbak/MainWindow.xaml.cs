@@ -30,9 +30,15 @@ namespace DistRS
 
         const int height = 240;
         const int width = 320;
-        const int arraySize = ((320 / 10) * (240 / 10));
+        const int arraySize = ((320 / 5) * (240 / 5));
         float[] distArray = new float[arraySize];
         float[] callibrationArray = new float[arraySize];
+
+        int callibrationClickCount = 0;
+        Point callibrationTopLeft = new Point(0f, 0f);
+        Point callibrationBottomRight = new Point(320f, 240f);
+        bool callibrationCornersSet = false;
+
 
         private SerialCommunication com;
         int pixelCount = 0;
@@ -155,8 +161,8 @@ namespace DistRS
         // Create a callibration distance array
         private void ButtonCallibrate_Click(object sender, RoutedEventArgs e)
         {
-            tbDotCount.Text = "0";
             CheckPixels(callibrationArray);
+            tbDotCount.Text = "Callibration done.";
         }
         // Compare current to callibration
         private void ButtonCompare_Click(object sender, RoutedEventArgs e)
@@ -185,15 +191,15 @@ namespace DistRS
             using (var frames = pipe.WaitForFrames())
             using (var depth = frames.DepthFrame)
             {
-                for (int i = 0; i < width; i++) // Check Width 320/10 pixels.
+                for (int x = (int)callibrationTopLeft.X; x < callibrationBottomRight.X; x++) // Check Width 320/10 pixels.
                 {
-                    for (int j = 0; j < height; j++) // Check Height 240/10 pixels.
+                    for (int y = (int)callibrationTopLeft.Y; y < callibrationBottomRight.Y; y++) // Check Height 240/10 pixels.
                     {
-                        if (i % 10 == 0 && j % 10 == 0)
-                        {
+                        //if (x % 5 == 0 && y % 5 == 0)
+                        //{
                             num++;
-                            array[num] = depth.GetDistance(i, j);
-                        }
+                            array[num] = depth.GetDistance(x, y);
+                        //}
                     }
                 }
                 depth.Dispose();
@@ -207,50 +213,82 @@ namespace DistRS
             // Y-axis first followed by the X-axis. Top left to bottom left then moving one to the right.
             pixelCount = 0; // Count of the amount of pixels that are closer than in the callibration.
             int x = 0; // Keep track of the x coordinate of the current pixel.
-            int y = -1;  // Keep track of the y coordinate of the current pixel.
+            int y = 0;  // Keep track of the y coordinate of the current pixel.
             
-            Rectangle[,] rectangles = new Rectangle[33, 25];
+            Rectangle[,] rectangles = new Rectangle[(int)(callibrationBottomRight.X - callibrationTopLeft.X) +1, (int)(callibrationBottomRight.Y - callibrationTopLeft.Y) + 1];
 
             // Start by clearing the last canvas.
             CanvasMap.Children.Clear();
 
             for (int i = 0; i < callibrationArray.Length; i++)
-            {
-                y++;
+            { 
                 // Count amount of pixels that are closer now compared to before.
-                if (distArray[i] + 0.01f < callibrationArray[i])
+                if ( callibrationArray[i] != 0 && distArray[i] != 0 && distArray[i] + 0.01f < callibrationArray[i])
                 {
                     pixelCount++;
-
                     // Save for the drawing.
+                    //int x1 = x;
+                    int ymax = (int)(callibrationBottomRight.Y - callibrationTopLeft.Y) + 1;
+                    int y1 = y;
+
                     rectangles[x, y] =
                         new Rectangle()
-                        { 
+                        {
                             Width = 10,
                             Height = 10,
                             Fill = Brushes.Red,
-                            RenderTransform = new TranslateTransform(x * 10, y * 10)
+                            RenderTransform = new TranslateTransform(x * 2, y * 2)
+
                         };
                     // Draw the map.
-                    CanvasMap.Children.Add(rectangles[x,y]);
+                    CanvasMap.Children.Add(rectangles[x, y]);
                 }
-
+                y++;
                 // Go through it row to row
-                if ((i + 1) % 24 == 0)
+                if ((i + 1) % (callibrationBottomRight.Y - callibrationTopLeft.Y) == 0)
                 {
                     y = 0;
                     x++;
                 }
             }
-                
-            tbDotCount.Text = pixelCount.ToString() + " / " + arraySize;
-        }
+            Console.WriteLine(x + "/" + y);
 
+            // Move 
+
+            tbDotCount.Text = pixelCount.ToString() + " / " + callibrationArray.Length;
+        }
 
         // Connect to the arduino and start playing.
         private void ButtonConnect_Click(object sender, RoutedEventArgs e)
         {
             com = new SerialCommunication();
+        }
+
+        private void Window_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Point p = Mouse.GetPosition(CanvasMap);
+            p.X = Math.Round(p.X / 2);
+            p.Y = Math.Round(p.Y / 2);
+            
+            switch (callibrationClickCount)
+            {
+                case 0: // First click.
+                    callibrationTopLeft = p;
+                    break;
+                case 1: // Second click.
+                    callibrationBottomRight = p;
+                    callibrationCornersSet = true;
+                    Console.WriteLine(callibrationTopLeft + "/" + callibrationBottomRight);
+                    int newArraySize = (int)((callibrationBottomRight.X - callibrationTopLeft.X)*(callibrationBottomRight.Y - callibrationTopLeft.Y));
+                    distArray = new float[newArraySize];
+                    callibrationArray = new float[newArraySize];
+
+                    // Move canvas to the right place.
+                    //
+
+                    break;
+            }
+            callibrationClickCount++; 
         }
     }
 }

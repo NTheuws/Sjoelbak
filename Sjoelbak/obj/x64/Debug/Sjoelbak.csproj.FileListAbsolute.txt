@@ -14,3 +14,19 @@ C:\Users\Niels\Documents\Visual Studio 2019\New folder\Sjoelbak\obj\x64\Debug\Sj
 C:\Users\Niels\Documents\Visual Studio 2019\New folder\Sjoelbak\obj\x64\Debug\Sjoelbak.csproj.CopyComplete
 C:\Users\Niels\Documents\Visual Studio 2019\New folder\Sjoelbak\obj\x64\Debug\Sjoelbak.exe
 C:\Users\Niels\Documents\Visual Studio 2019\New folder\Sjoelbak\obj\x64\Debug\Sjoelbak.pdb
+C:\Users\Niels\Documents\Visual Studio 2019\Sjoelbak\Sjoelbak\bin\x64\Debug\Sjoelbak.exe.config
+C:\Users\Niels\Documents\Visual Studio 2019\Sjoelbak\Sjoelbak\bin\x64\Debug\Sjoelbak.exe
+C:\Users\Niels\Documents\Visual Studio 2019\Sjoelbak\Sjoelbak\bin\x64\Debug\Sjoelbak.pdb
+C:\Users\Niels\Documents\Visual Studio 2019\Sjoelbak\Sjoelbak\obj\x64\Debug\Sjoelbak.csproj.AssemblyReference.cache
+C:\Users\Niels\Documents\Visual Studio 2019\Sjoelbak\Sjoelbak\obj\x64\Debug\MainWindow.g.cs
+C:\Users\Niels\Documents\Visual Studio 2019\Sjoelbak\Sjoelbak\obj\x64\Debug\App.g.cs
+C:\Users\Niels\Documents\Visual Studio 2019\Sjoelbak\Sjoelbak\obj\x64\Debug\Sjoelbak_MarkupCompile.cache
+C:\Users\Niels\Documents\Visual Studio 2019\Sjoelbak\Sjoelbak\obj\x64\Debug\Sjoelbak_MarkupCompile.lref
+C:\Users\Niels\Documents\Visual Studio 2019\Sjoelbak\Sjoelbak\obj\x64\Debug\MainWindow.baml
+C:\Users\Niels\Documents\Visual Studio 2019\Sjoelbak\Sjoelbak\obj\x64\Debug\Sjoelbak.g.resources
+C:\Users\Niels\Documents\Visual Studio 2019\Sjoelbak\Sjoelbak\obj\x64\Debug\Sjoelbak.Properties.Resources.resources
+C:\Users\Niels\Documents\Visual Studio 2019\Sjoelbak\Sjoelbak\obj\x64\Debug\Sjoelbak.csproj.GenerateResource.cache
+C:\Users\Niels\Documents\Visual Studio 2019\Sjoelbak\Sjoelbak\obj\x64\Debug\Sjoelbak.csproj.CoreCompileInputs.cache
+C:\Users\Niels\Documents\Visual Studio 2019\Sjoelbak\Sjoelbak\obj\x64\Debug\Sjoelbak.csproj.CopyComplete
+C:\Users\Niels\Documents\Visual Studio 2019\Sjoelbak\Sjoelbak\obj\x64\Debug\Sjoelbak.exe
+C:\Users\Niels\Documents\Visual Studio 2019\Sjoelbak\Sjoelbak\obj\x64\Debug\Sjoelbak.pdb

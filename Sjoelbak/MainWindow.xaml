@@ -5,16 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DistRS"
         mc:Ignorable="d"
-        Title="Distance and Camera view" Height="864" Width="836.8">
+        Title="Distance and Camera view" Height="864" Width="836.8" MouseLeftButtonUp="Window_MouseLeftButtonUp">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="101*"/>
             <RowDefinition Height="38*"/>
         </Grid.RowDefinitions>
         <TextBox x:Name="txtTimeStamp" Grid.Column="0" Margin="0,0,-0.6,198.4"/>
-        <Image x:Name="imgColor" Margin="145,102,365.4,264.4" Height="240" Width="320" />
+        <Image x:Name="imgColor" Margin="120,606,390.4,-11.6" Height="240" Width="320" Grid.RowSpan="2" />
 
-        <Image x:Name="imgDepth" Grid.Column="0" Margin="470,102,40.4,264.4" Width="320" Height="240" />
+        <Image x:Name="imgDepth" Width="640" Height="480" Margin="125,63,65.4,63.4" />
         <TextBox x:Name="Xcoordinate" HorizontalAlignment="Left" Height="23" Margin="258,0,0,0" TextWrapping="Wrap" Text="320" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="Ycoordinate" HorizontalAlignment="Left" Height="23" Margin="378,0,0,0" TextWrapping="Wrap" Text="240" VerticalAlignment="Top" Width="120"/>
         <Button x:Name="ButtonReadDist" Content="Read Distance" HorizontalAlignment="Left" Margin="503,4,0,0" VerticalAlignment="Top" Width="110" Height="19" Click="ButtonReadDist_Click"/>
@@ -25,7 +25,7 @@
         <Button x:Name="BtnCompare" Content="Compare" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" Width="110" Height="19" Click="ButtonCompare_Click"/>
         <TextBox x:Name="tbDotCount" HorizontalAlignment="Left" Height="19" Margin="10,126,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110"/>
         <Button x:Name="BtnConnect" Content="Connect" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="110" Height="19" Click="ButtonConnect_Click"/>
-        <Canvas x:Name="CanvasMap" Height="360" Margin="175,432,175.4,0" VerticalAlignment="Top" Background="#FFD1D1D1" Grid.RowSpan="2" Width="480"/>
+        <Canvas x:Name="CanvasMap" Height="480" Margin="120,63,70.4,0" VerticalAlignment="Top" Width="640" Opacity="0.5"/>
     </Grid>
 
 </Window>
