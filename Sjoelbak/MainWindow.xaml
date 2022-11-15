@@ -25,7 +25,14 @@
         <Button x:Name="BtnCompare" Content="Compare" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" Width="110" Height="19" Click="ButtonCompare_Click"/>
         <TextBox x:Name="tbDotCount" HorizontalAlignment="Left" Height="19" Margin="10,126,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110"/>
         <Button x:Name="BtnConnect" Content="Connect" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="110" Height="19" Click="ButtonConnect_Click"/>
-        <Canvas x:Name="CanvasMap" Height="480" Margin="120,63,70.4,0" VerticalAlignment="Top" Width="640" Opacity="0.5"/>
+        <Canvas x:Name="CanvasMap" Height="480" Margin="120,63,70.4,0" VerticalAlignment="Top" Width="640" Opacity="0.5" >
+            <Canvas.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform x:Name="st"/>
+                    <TranslateTransform x:Name="translate"/>
+                </TransformGroup>
+            </Canvas.RenderTransform>
+        </Canvas>
     </Grid>
 
 </Window>

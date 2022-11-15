@@ -191,9 +191,9 @@ namespace DistRS
             using (var frames = pipe.WaitForFrames())
             using (var depth = frames.DepthFrame)
             {
-                for (int x = (int)callibrationTopLeft.X; x < callibrationBottomRight.X; x++) // Check Width 320/10 pixels.
+                for (int x = (int)callibrationTopLeft.X; x < callibrationBottomRight.X; x++) // Check Width.
                 {
-                    for (int y = (int)callibrationTopLeft.Y; y < callibrationBottomRight.Y; y++) // Check Height 240/10 pixels.
+                    for (int y = (int)callibrationTopLeft.Y; y < callibrationBottomRight.Y; y++) // Check Height. 
                     {
                         //if (x % 5 == 0 && y % 5 == 0)
                         //{
@@ -226,11 +226,8 @@ namespace DistRS
                 if ( callibrationArray[i] != 0 && distArray[i] != 0 && distArray[i] + 0.01f < callibrationArray[i])
                 {
                     pixelCount++;
-                    // Save for the drawing.
-                    //int x1 = x;
-                    int ymax = (int)(callibrationBottomRight.Y - callibrationTopLeft.Y) + 1;
-                    int y1 = y;
 
+                    // Save for the drawing.
                     rectangles[x, y] =
                         new Rectangle()
                         {
@@ -253,7 +250,9 @@ namespace DistRS
             }
             Console.WriteLine(x + "/" + y);
 
-            // Move 
+            // Move the canvas to fit in with the depth image.
+
+            // TO DO
 
             tbDotCount.Text = pixelCount.ToString() + " / " + callibrationArray.Length;
         }
@@ -283,8 +282,8 @@ namespace DistRS
                     distArray = new float[newArraySize];
                     callibrationArray = new float[newArraySize];
 
-                    // Move canvas to the right place.
-                    //
+                    translate.X = callibrationTopLeft.X * 2;
+                    translate.Y = callibrationTopLeft.Y * 2;
 
                     break;
             }
