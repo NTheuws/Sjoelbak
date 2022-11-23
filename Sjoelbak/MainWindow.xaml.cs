@@ -39,6 +39,10 @@ namespace DistRS
         Point callibrationBottomRight = new Point(320f, 240f);
         bool callibrationCornersSet = false;
 
+        System.Threading.Thread observeThread;
+        bool MeassureLooping = false;
+        bool MeassureLoopEnding = false;
+
 
         private SerialCommunication com;
         int pixelCount = 0;
@@ -195,14 +199,11 @@ namespace DistRS
                 {
                     for (int y = (int)callibrationTopLeft.Y; y < callibrationBottomRight.Y; y++) // Check Height. 
                     {
-                        //if (x % 5 == 0 && y % 5 == 0)
-                        //{
-                            num++;
-                            array[num] = depth.GetDistance(x, y);
-                        //}
+                        num++;
+                        array[num] = depth.GetDistance(x, y);
                     }
                 }
-                depth.Dispose();
+                //depth.Dispose();
                 frames.Dispose();
             }
         }
@@ -214,31 +215,37 @@ namespace DistRS
             pixelCount = 0; // Count of the amount of pixels that are closer than in the callibration.
             int x = 0; // Keep track of the x coordinate of the current pixel.
             int y = 0;  // Keep track of the y coordinate of the current pixel.
+
+            float noiseSupression = 0.01f; // Variable to prevent the noise of the sensor.
             
             Rectangle[,] rectangles = new Rectangle[(int)(callibrationBottomRight.X - callibrationTopLeft.X) +1, (int)(callibrationBottomRight.Y - callibrationTopLeft.Y) + 1];
 
-            // Start by clearing the last canvas.
-            CanvasMap.Children.Clear();
+            // Start by clearing the last canvas if not looping.
+            if (!MeassureLooping && !MeassureLoopEnding)
+            {
+                CanvasMap.Children.Clear();
+            }
 
             for (int i = 0; i < callibrationArray.Length; i++)
             { 
                 // Count amount of pixels that are closer now compared to before.
-                if ( callibrationArray[i] != 0 && distArray[i] != 0 && distArray[i] + 0.01f < callibrationArray[i])
+                if ( callibrationArray[i] != 0 && distArray[i] != 0 && distArray[i] + noiseSupression < callibrationArray[i])
                 {
                     pixelCount++;
-
-                    // Save for the drawing.
-                    rectangles[x, y] =
-                        new Rectangle()
-                        {
-                            Width = 10,
-                            Height = 10,
-                            Fill = Brushes.Red,
-                            RenderTransform = new TranslateTransform(x * 2, y * 2)
-
-                        };
-                    // Draw the map.
-                    CanvasMap.Children.Add(rectangles[x, y]);
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        // Save for the drawing.
+                        rectangles[x, y] =
+                            new Rectangle()
+                            {
+                                Width = 10,
+                                Height = 10,
+                                Fill = Brushes.Red,
+                                RenderTransform = new TranslateTransform(x * 2, y * 2)
+                            };
+                        // Draw the map.
+                        CanvasMap.Children.Add(rectangles[x, y]);
+                    });
                 }
                 y++;
                 // Go through it row to row
@@ -248,13 +255,7 @@ namespace DistRS
                     x++;
                 }
             }
-            Console.WriteLine(x + "/" + y);
-
-            // Move the canvas to fit in with the depth image.
-
-            // TO DO
-
-            tbDotCount.Text = pixelCount.ToString() + " / " + callibrationArray.Length;
+            //tbDotCount.Text = pixelCount.ToString() + " / " + callibrationArray.Length;
         }
 
         // Connect to the arduino and start playing.
@@ -288,6 +289,38 @@ namespace DistRS
                     break;
             }
             callibrationClickCount++; 
+        }
+
+        // Button to loop through the meassure mode.
+        private void ButtonMeassureLoop_Click(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("DING");
+            if (!MeassureLooping)
+            {
+                MeassureLooping = true;
+
+                // Start the loop in another thread.
+                observeThread = new System.Threading.Thread(MeassureLoop);
+                observeThread.IsBackground = true;
+                observeThread.Start();
+            }
+            else
+            {
+                MeassureLooping = false;
+                MeassureLoopEnding = true;
+            }
+        }
+
+        private void MeassureLoop()
+        {
+            while (MeassureLooping)
+            {
+                CheckPixels(distArray);
+                ComparePixels();
+            }
+            observeThread.Abort();
+            MeassureLoopEnding = false;
+
         }
     }
 }
