@@ -42,6 +42,12 @@ namespace DistRS
         List<Point> discPoints = new List<Point>();  // Array of the recorded points within 1 throw.
         List<Canvas> trajectories = new List<Canvas>(); // Trajectory of each throw, so it can be shown later.
 
+        // Variables for the minimal and maximum size of the lines drawn.
+        int xmin = 0;
+        int ymin = 0;
+        int xmax;
+        int ymax;
+
         System.Threading.Thread observeThread;
         bool MeasureLooping = false;
         bool MeasureLoopEnding = false;
@@ -328,8 +334,28 @@ namespace DistRS
                                 Y1 = lastPoint.Y * 2,
                                 X2 = tempDiscPoint.X * 2,
                                 Y2 = tempDiscPoint.Y * 2,
-                                StrokeThickness = 5,
+                                StrokeThickness = 5
                             };
+
+                            // When its the first line trace it to the beginning of the field.
+                            if (lastItem == 1)
+                            {
+                                try
+                                {
+                                    //rc = Δy ⁄ Δx
+                                    double rc = (tempLine.Y1 - tempLine.Y2) / (tempLine.X1 - tempLine.X2);
+
+                                    //Calculate the point where the disc comes from to prevent a larger gap from being created.
+                                    double xDif = xmax - tempLine.X2;
+                                    double yIncrease = xDif * rc;
+                                    tempLine.X1 = xmax;
+                                    tempLine.Y1 = tempLine.Y2 + yIncrease;
+                                }
+                                catch (ArgumentException)
+                                {
+                                    MessageBox.Show("It wasn't calibrated correctly, please try again.");
+                                }
+                            }
                             CanvasMap.Children.Add(tempLine);
                         });
                     }
@@ -374,6 +400,9 @@ namespace DistRS
                     translate.X = callibrationTopLeft.X * 2;
                     translate.Y = callibrationTopLeft.Y * 2;
 
+                    // Max values are multiplied by 2 since the pixelcount is divided by 2.
+                    xmax = Convert.ToInt32(callibrationBottomRight.X - callibrationTopLeft.X) * 2;
+                    ymax = Convert.ToInt32(callibrationBottomRight.Y - callibrationTopLeft.Y) * 2;
                     break;
             }
             callibrationClickCount++; 
