@@ -49,8 +49,9 @@ namespace DistRS
         int ymax;
 
         System.Threading.Thread observeThread;
-        bool MeasureLooping = false;
-        bool MeasureLoopEnding = false;
+        bool measureLooping = false;
+        bool measureLoopEnding = false;
+        bool placeFinalDot = false;
 
 
         private SerialCommunication goalCom;
@@ -127,6 +128,7 @@ namespace DistRS
                             Dispatcher.Invoke(DispatcherPriority.Render, updateDepth, colorizedDepth);
                             Dispatcher.Invoke(DispatcherPriority.Render, updateColor, colorFrame);
 
+                            // System.ObjectDisposedException: 'Cannot access a disposed object.
                             Dispatcher.Invoke(new Action(() =>
                             {
                                 String depth_dev_sn = depthFrame.Sensor.Info[CameraInfo.SerialNumber];
@@ -178,11 +180,11 @@ namespace DistRS
             CheckPixels(callibrationArray);
             tbDotCount.Text = "Callibration done.";
         }
-        // Compare current to callibration
-        private void ButtonCompare_Click(object sender, RoutedEventArgs e)
+        // Reset current values to be able to start the next throw.
+        private void ButtonReset_Click(object sender, RoutedEventArgs e)
         {
-            CheckPixels(distArray);
-            ComparePixels();
+            CanvasMap.Children.Clear();
+            discPoints.Clear();
         }
 
         private float GetDistance(int x, int y)
@@ -235,7 +237,7 @@ namespace DistRS
             Point tempDiscPoint = new Point (-1, -1);
 
             // Start by clearing the last canvas if not looping.
-            if (!MeasureLooping && !MeasureLoopEnding)
+            if (!measureLooping && !measureLoopEnding)
             {
                 CanvasMap.Children.Clear();
             }
@@ -251,7 +253,7 @@ namespace DistRS
                     // Always take the same point of the disc for each state.
                     // The top-most(priority), right-most(secondary) will be used.
                     // Y axis is flipped.
-                    if (MeasureLooping)
+                    if (measureLooping)
                     {
                         if (y > tempDiscPoint.Y
                             || (y == tempDiscPoint.Y && x > tempDiscPoint.X))
@@ -266,7 +268,7 @@ namespace DistRS
                         }
                     }
                     pixelCount++;
-                    if (MeasureLoopEnding)
+                    if (placeFinalDot)
                     {
                         this.Dispatcher.Invoke(() =>
                         {
@@ -282,6 +284,8 @@ namespace DistRS
                         // Draw the map.
                         CanvasMap.Children.Add(rectangles[x, y]);
                         });
+                        // Save the canvas for later.
+                        trajectories.Add(CanvasMap);
                     }
                 }
                 y++;
@@ -295,7 +299,7 @@ namespace DistRS
             }
             // Only when there has been a new point add it to the array.
             if (tempDiscPoint.X != -1
-                && tempDiscPoint.Y != -1 
+                && tempDiscPoint.Y != -1
                 && tempDiscPoint != null)
             {
                 // Only add it when the coordinates are different then the ones before.
@@ -313,10 +317,10 @@ namespace DistRS
                 }
 
                 if (lastPoint != null
-                    || lastPoint.X + 5< tempDiscPoint.X
-                    || lastPoint.X - 5> tempDiscPoint.X
-                    || lastPoint.Y + 5< tempDiscPoint.Y
-                    || lastPoint.Y - 5> tempDiscPoint.Y)
+                    || lastPoint.X + 5 < tempDiscPoint.X
+                    || lastPoint.X - 5 > tempDiscPoint.X
+                    || lastPoint.Y + 5 < tempDiscPoint.Y
+                    || lastPoint.Y - 5 > tempDiscPoint.Y)
                 {
                     // Add the point to the list.
                     discPoints.Add(tempDiscPoint);
@@ -351,6 +355,7 @@ namespace DistRS
                                     tempLine.X1 = xmax;
                                     tempLine.Y1 = tempLine.Y2 + yIncrease;
                                 }
+                                // Sometimes it will think the new point is placed at 'infinity' which is caused by a bad calibration or someone walking through the field.
                                 catch (ArgumentException)
                                 {
                                     MessageBox.Show("It wasn't calibrated correctly, please try again.");
@@ -411,10 +416,10 @@ namespace DistRS
         // Button to loop through the meassure mode.
         private void ButtonMeassureLoop_Click(object sender, RoutedEventArgs e)
         {
-            if (!MeasureLooping)
+            if (!measureLooping)
             {
-                MeasureLooping = true;
-
+                measureLooping = true;
+                placeFinalDot = false;
                 // Start the loop in another thread.
                 observeThread = new System.Threading.Thread(MeassureLoop);
                 observeThread.IsBackground = true;
@@ -422,20 +427,22 @@ namespace DistRS
             }
             else
             {
-                MeasureLooping = false;
-                MeasureLoopEnding = true;
+                placeFinalDot = true;
+                measureLooping = false;
+                measureLoopEnding = true;
             }
         }
 
         private void MeassureLoop()
         {
-            while (MeasureLooping)
+            while (measureLooping)
             {
                 CheckPixels(distArray);
                 ComparePixels();
             }
             observeThread.Abort();
-            MeasureLoopEnding = false;
+            measureLoopEnding = false;
+            ComparePixels();
         }
     }
 }

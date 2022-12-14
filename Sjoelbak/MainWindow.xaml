@@ -22,7 +22,7 @@
         <Label Content="FPS:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="73"/>
         <Label x:Name="lblfps" Content="Label" HorizontalAlignment="Left" Margin="47,10,0,0" VerticalAlignment="Top" Width="73"/>
         <Button x:Name="BtnCallibrate" Content="Callibrate" HorizontalAlignment="Left" Margin="10,78,0,0" VerticalAlignment="Top" Width="110" Height="19" Click="ButtonCallibrate_Click"/>
-        <Button x:Name="BtnCompare" Content="Compare" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" Width="110" Height="19" Click="ButtonCompare_Click"/>
+        <Button x:Name="BtnReset" Content="Reset" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top" Width="110" Height="19" Click="ButtonReset_Click"/>
         <TextBox x:Name="tbDotCount" HorizontalAlignment="Left" Height="19" Margin="10,126,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="110"/>
         <Button x:Name="BtnConnect" Content="Connect" HorizontalAlignment="Left" Margin="10,150,0,0" VerticalAlignment="Top" Width="110" Height="19" Click="ButtonConnect_Click"/>
         <Canvas x:Name="CanvasMap" Height="480" Margin="120,63,70.4,0" VerticalAlignment="Top" Width="640" Opacity="0.5" >
