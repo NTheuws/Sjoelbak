@@ -16,7 +16,12 @@ namespace DistRS
         {
             serialPort = new SerialPort();
             serialPort.BaudRate = 9600;
-            serialPort.PortName = "COM5";
+        }
+        public SerialCommunication(String port)
+        {
+            serialPort = new SerialPort();
+            serialPort.BaudRate = 9600;
+            serialPort.PortName = port;
         }
 
         public void Connect()
