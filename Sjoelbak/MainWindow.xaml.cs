@@ -129,6 +129,7 @@ namespace DistRS
                             Dispatcher.Invoke(DispatcherPriority.Render, updateColor, colorFrame);
 
                             // System.ObjectDisposedException: 'Cannot access a disposed object.
+
                             Dispatcher.Invoke(new Action(() =>
                             {
                                 String depth_dev_sn = depthFrame.Sensor.Info[CameraInfo.SerialNumber];
@@ -137,10 +138,15 @@ namespace DistRS
                     }
                 }, tokenSource.Token);
             }
+            catch (ObjectDisposedException)
+            {
+                // Sometimes happens on resetting, but it'll take the next one automatically. Can be ignored.
+            }
             catch (Exception)
             {
                 Application.Current.Shutdown();
             }
+
         }
 
         private void Control_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -185,6 +191,7 @@ namespace DistRS
         {
             CanvasMap.Children.Clear();
             discPoints.Clear();
+            tbDotCount.Text = "Reset canvas.";
         }
 
         private float GetDistance(int x, int y)
@@ -424,12 +431,14 @@ namespace DistRS
                 observeThread = new System.Threading.Thread(MeassureLoop);
                 observeThread.IsBackground = true;
                 observeThread.Start();
+                tbDotCount.Text = "Start Measuring";
             }
             else
             {
                 placeFinalDot = true;
                 measureLooping = false;
                 measureLoopEnding = true;
+                tbDotCount.Text = "Stop Measuring";
             }
         }
 
